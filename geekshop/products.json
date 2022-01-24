@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Ночник",
+        "description": "суперстул",
+        "image": "img/product-11.jpg"
+    },
+    {
+        "name": "Стул",
+        "description": "суперстул",
+        "image": "img/product-21.jpg"
+    },
+    {
+        "name": "Лампа",
+        "description": "суперстул",
+        "image": "img/product-31.jpg"
+    }
+]

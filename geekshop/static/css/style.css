@@ -261,6 +261,11 @@ html, body {
 	justify-content: space-between;
 	margin-bottom: 120px;
 }
+
+.tab-content img.product-image {
+	height: 270px;
+	width: 270px;
+}
 .tab-content .block {
 	height: 270px;
 	width: 270px;

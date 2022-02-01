@@ -6,9 +6,9 @@ from django.shortcuts import render
 from .models import Product, ProductCategory
 
 MENU_LINKS = [
-    {'url': 'main', 'name': 'домой'},
-    {'url': 'products:products', 'name': 'продукты'},
-    {'url': 'contact', 'name': 'контакты'},
+    {"url": "main", "name": "домой"},
+    {"url": "products:products", "name": "продукты"},
+    {"url": "contact", "name": "контакты"},
 ]
 
 
@@ -17,10 +17,10 @@ def index(request):
 
     return render(
         request,
-        'mainapp/index.html',
+        "mainapp/index.html",
         context={
-            'title': 'Главная',
-            'menu_links': MENU_LINKS,
+            "title": "Главная",
+            "menu_links": MENU_LINKS,
             "products": products,
         },
     )
@@ -28,19 +28,19 @@ def index(request):
 
 def products(request):
     categories = ProductCategory.objects.all()
-    with open('./products.json', 'r') as file:
+    with open("./products.json", "r") as file:
         products = json.load(file)
 
     return render(
         request,
-        'mainapp/products.html',
+        "mainapp/products.html",
         context={
-            'title': 'Продукты',
-            'products': [],
-            'menu_links': MENU_LINKS,
+            "title": "Продукты",
+            "products": [],
+            "menu_links": MENU_LINKS,
             "categories": categories,
-
-        },)
+        },
+    )
 
 
 def category(request, pk):
@@ -48,8 +48,11 @@ def category(request, pk):
 
 
 def contact(request):
-    return render(request, 'mainapp/contact.html', context={
-        'title': 'Контакты',
-        'menu_links': MENU_LINKS,
-
-    },)
+    return render(
+        request,
+        "mainapp/contact.html",
+        context={
+            "title": "Контакты",
+            "menu_links": MENU_LINKS,
+        },
+    )

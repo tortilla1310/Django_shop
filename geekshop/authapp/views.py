@@ -4,7 +4,8 @@ from django.template import context
 from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
 from django.urls import reverse
 from django.contrib import auth
-
+# from django.conf import settings
+# from django.utils.timezone import now
 
 # Create your views here.
 
@@ -20,7 +21,21 @@ def login(request):
                 request, username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
+                if 'next' in request.GET.keys():
+                    return HttpResponseRedirect(request.GET["next"])
                 return HttpResponseRedirect(reverse("main"))
+            # user = auth.authenticate(
+            #     request, username=username, password=password)
+            # if user and user.is_active:
+            #     auth.login(request, user)
+            #     user.failed_attempts = 0
+            #     return HttpResponseRedirect(reverse("main"))
+            # elif user.failed_attempts > settings.FAILED_ATTEMPTS_MAX:
+            #     user.is_active = False
+            # else:
+            #     user.failed_attempts += 1
+            #     user.last_failed_attempt = now()
+            # user.save()
 
     else:
         login_form = ShopUserLoginForm()

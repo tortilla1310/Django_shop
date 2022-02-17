@@ -19,10 +19,15 @@
             {{ user.first_name|default:'Пользователь' }}
         </a> 
     </li>
+    {% if user.is_superuser %}
+    <li>
+        <a href="{% url 'admin:users' %}">
+            Админка
+        </a> 
+    </li>
+    {% endif %}
     <li> 
         <a href="{% url 'basket:view' %}">
-            {% comment %} Корзина {% endcomment %}
-            {% comment %} <i class="fa fa-shopping-basket"></i> {% endcomment %}
             {{ user.basket.total_cost }} руб. ({{ user.basket.total_quantity }})
         </a>
     </li>

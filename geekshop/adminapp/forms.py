@@ -1,13 +1,27 @@
 from django import forms
-from authapp.forms import ShopUserEditForm
+from authapp.forms import ShopUserEditForm, ShopUserRegisterForm
 from mainapp.models import ProductCategory
 from authapp.models import ShopUser
 
 
-class ShopUserAdminForm(ShopUserEditForm):
+class ShopUserEditAdminForm(ShopUserEditForm):
     class Meta:
         model = ShopUser
         fields = '__all__'
+
+
+class ShopUserCreateAdminForm(ShopUserRegisterForm):
+    class Meta:
+        model = ShopUser
+        fields = (
+            "username",
+            "first_name",
+            "email",
+            "age",
+            "avatar",
+            "city",
+            "phone",
+        )
 
 
 class ProductCategoryAdminForm(forms.ModelForm):

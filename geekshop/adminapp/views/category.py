@@ -20,10 +20,9 @@ def category_create(request):
         form = ProductCategoryAdminForm()
 
     return render(
-        request, "adminapp/category/edit.html", context={
-            "title": "Создание категории",
-            "form": form
-        }
+        request,
+        "adminapp/category/edit.html",
+        context={"title": "Создание категории", "form": form},
     )
 
 
@@ -40,19 +39,20 @@ def categories(request):
 @superuser_required
 def category_update(request, pk):
     category = get_object_or_404(ProductCategory, pk=pk)
+
     if request.method == "POST":
         form = ProductCategoryAdminForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("admin:categories"))
     else:
-        form = ProductCategoryAdminForm()
+        form = ProductCategoryAdminForm(request.POST, instance=category)
 
     return render(
         request, "adminapp/category/edit.html", context={
             "title": "Редактирование категории",
             "form": form
-        }
+        },
     )
 
 

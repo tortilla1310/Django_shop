@@ -1,74 +1,74 @@
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from authapp.models import ShopUser
-from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
 from adminapp.utils import superuser_required
-from adminapp.forms import ShopUserAdminForm
+from adminapp.forms import ShopUserCreateAdminForm, ShopUserEditAdminForm
 from django.http.response import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+
+from adminapp.forms import ShopUserCreateAdminForm, ShopUserEditAdminForm
 
 
-@superuser_required
-def user_create(request):
-    if request.method == "POST":
-        form = ShopUserAdminForm(
-            request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("admin:users"))
-    else:
-        form = ShopUserAdminForm()
+class UserCreateView(CreateView):
+    model = ShopUser
+    template_name = 'adminapp/user/edit.html'
+    form_class = ShopUserCreateAdminForm
+    success_url = reverse_lazy("admin:users")
 
-    return render(
-        request, "adminapp/user/edit.html", context={
-            "title": "Создание пользователя",
-            "form": form
-        }
-    )
+    @method_decorator(superuser_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = " Создание пользователя"
+        return context
 
 
-@superuser_required
-def users(request):
-    users = ShopUser.objects.all().order_by('id')
+class UserListView(ListView):
+    model = ShopUser
+    template_name = 'adminapp/user/users.html'
+    paginate_by = 1
 
-    return render(request, 'adminapp/user/users.html', context={
-        'title': 'Пользователи',
-        'objects': users
-    })
+    @method_decorator(superuser_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-
-@superuser_required
-def user_update(request, pk):
-    user = get_object_or_404(ShopUser, pk=pk)
-    if request.method == "POST":
-        form = ShopUserAdminForm(
-            request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("admin:users"))
-    else:
-        form = ShopUserAdminForm(instance=user)
-
-    return render(
-        request, "adminapp/user/edit.html", context={
-            "title": "Редактирование пользователя",
-            "form": form
-        }
-    )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Список пользователей"
+        return context
 
 
-@superuser_required
-def user_delete(request, pk):
-    title = 'Удаление пользователя'
+class UserUpdateView(UpdateView):
+    model = ShopUser
+    template_name = 'adminapp/user/edit.html'
+    form_class = ShopUserEditAdminForm
+    success_url = reverse_lazy('admin:users')
 
-    user = get_object_or_404(ShopUser, pk=pk)
+    @method_decorator(superuser_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-    if request.method == 'POST':
-        # user.delete()
-        # вместо удаления лучше сделаем неактивным
-        user.is_active = False
-        user.save()
-        return HttpResponseRedirect(reverse('admin:users'))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Редактирование пользователя"
+        return context
 
-    content = {'title': title, 'user_to_delete': user}
 
-    return render(request, 'adminapp/user/delete.html', content)
+class UserDeleteView(DeleteView):
+    model = ShopUser
+    template_name = 'adminapp/user/delete.html'
+    success_url = reverse_lazy('admin:users')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Удаление пользователя"
+        return context

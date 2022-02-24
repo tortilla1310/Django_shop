@@ -1,11 +1,23 @@
+{% load static %}
+{% if paginator %}
+    {% if page.has_previous %}
+        <a href ="{% url 'products:paged_category' category_id page.previous_page_number %}">Сюда</a>
+    {% endif %}
+
+    Страница {{ page.number }} из {{ paginator.num_pages}}
+
+    {% if page.has_next%}
+    <a href ="{% url 'products:paged_category' category_id page.next_page_number %}">Туда</a>
+    {% endif %}
+{% endif %}
 {% for product in products %}
-    <div class="block">
-        <a href="{% url 'products:product' product.id %}"><img src="/media/{{ product.image }}" alt="">
-            <div class="text">
-                <img src="/static/img/icon-hover.png" alt="img">
-                <h4>{{ product.name }}</h4>
-                <p>{{ product.description }}</p>
-            </div>
-        </a>
-    </div>  
+<div class="block">
+    <a href="{% url 'products:product' product.id %}"><img src="/media/{{ product.image }}" alt="">
+        <div class="text">
+            <img src="{% static "img/icon-hover.png" alt="img" %}>
+            <h4>{{ product.name }}</h4>
+            <p>{{ product.description }}</p>
+        </div>
+    </a>
+</div>  
 {% endfor %}

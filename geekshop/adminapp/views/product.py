@@ -1,12 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView
+# from geekshop.mainapp.models import ProductCategory
 from mainapp.models import Product, ProductCategory
-from django.urls import reverse, reverse_lazy
 from adminapp.utils import superuser_required
-from django.http.response import HttpResponseRedirect
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import DeleteView, CreateView, UpdateView
 
 
 class ProductCreateView(CreateView):
@@ -47,32 +45,16 @@ def products(request, pk):
     })
 
 
-class ProductDetailView(DetailView):
-    model = Product
-    template_name = 'adminapp/product_read.html'
+@ superuser_required
+def product_read(request):
+    pass
 
 
-class ProductCategoryUpdateView(UpdateView):
-    model = ProductCategory
-    template_name = 'adminapp/category_update.html'
-    success_url = reverse_lazy('admin:categories')
-    fields = '__all__'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'категории/редактирование'
-
-        return context
+@ superuser_required
+def product_update(request):
+    pass
 
 
-class ProductCategoryDeleteView(DeleteView):
-    model = ProductCategory
-    template_name = 'adminapp/category_delete.html'
-    success_url = reverse_lazy('admin:categories')
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.is_active = False
-        self.object.save()
-
-        return HttpResponseRedirect(self.get_success_url())
+@ superuser_required
+def product_delete(request):
+    pass

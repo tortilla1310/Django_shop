@@ -8,6 +8,16 @@
             новый пользователь
         </a>
     </button>
+
+    {% if page_object.has_previous %}
+        Сюда
+    {% endif %}
+
+    Страница {{ page.number }} из {{ paginator.num_pages}}
+
+    {% if page_object.has_next%}
+        Туда
+        {% endif %}
     {% for object in object_list %}
     <div 
         class="user_record {% if not object.is_active %}not_active{% endif %}">

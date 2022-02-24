@@ -19,7 +19,7 @@ urlpatterns = [
          adminapp.category_delete, name='category_delete'),
 
     path('products/create/category/<int:pk>/',
-         adminapp.product_create, name='product_create'),
+         adminapp.ProductCreateView.as_view(), name='product_create'),
     path('products/read/category/<int:pk>/',
          adminapp.products, name='products'),
     path('products/read/<int:pk>/', adminapp.product_read, name='product_read'),

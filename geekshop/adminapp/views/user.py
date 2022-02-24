@@ -28,6 +28,7 @@ class UserCreateView(CreateView):
 class UserListView(ListView):
     model = ShopUser
     template_name = 'adminapp/user/users.html'
+    paginate_by = 1
 
     @method_decorator(superuser_required)
     def dispatch(self, request, *args, **kwargs):

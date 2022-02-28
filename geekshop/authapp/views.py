@@ -1,9 +1,10 @@
-from gettext import install
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.template import context
 from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
 from django.urls import reverse
 from django.contrib import auth
+from .utils import send_verify_mail
+from .models import ShopUser
 # from django.conf import settings
 # from django.utils.timezone import now
 
@@ -55,7 +56,8 @@ def register(request):
 
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
-            register_form.save()
+            user = register_form.save()
+            send_verify_mail(user)
             return HttpResponseRedirect(reverse("auth:login"))
     else:
         register_form = ShopUserRegisterForm()
@@ -84,3 +86,12 @@ def edit(request):
             "form": edit_form
         }
     )
+
+
+def verify(request, email, activation_key):
+    user = get_object_or_404(ShopUser, email=email)
+    if user.activation_key == activation_key:
+        user.is_active = True
+        user.save()
+        auth.login(request, user)
+    return render(request, 'authapp/verification.html')

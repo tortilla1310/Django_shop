@@ -19,7 +19,6 @@ def index(request):
         "mainapp/index.html",
         context={
             "title": "Главная",
-            "menu_links": MENU_LINKS,
             "products": products,
         },
     )
@@ -40,7 +39,6 @@ def products(request):
             "title": "Продукты",
             "hot_product": hot_product,
             "products": products.exclude(pk=hot_product.pk)[:4],
-            "menu_links": MENU_LINKS,
             "categories": categories,
         },
     )
@@ -67,7 +65,6 @@ def category(request, category_id, page=1):
             "paginator": paginator,
             "page": products_page,
             "products": products_page,
-            "menu_links": MENU_LINKS,
             "category": category,
             "categories": categories,
         },
@@ -83,7 +80,6 @@ def product(request, product_id):
         context={
             "title": "Продукты",
             "product": product,
-            "menu_links": MENU_LINKS,
             "categories": categories,
         },
     )
@@ -95,6 +91,5 @@ def contact(request):
         "mainapp/contact.html",
         context={
             "title": "Контакты",
-            "menu_links": MENU_LINKS,
         },
     )
